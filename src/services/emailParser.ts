@@ -1,11 +1,23 @@
-import { getGmailMessages } from './gmailService';
-import { getOutlookMessages } from './outlookService';
+import { getGmailMessages } from "./gmailService";
+import { getOutlookMessages } from "./outlookService";
+import { cca } from "../config/outlook";
 
 async function parseEmails() {
-    const gmailMessages = await getGmailMessages();
-    const outlookMessages = await getOutlookMessages();
+  // const authResult = await cca.acquireTokenByClientCredential({
+  //   scopes: ["https://graph.microsoft.com/.default"],
+  // });
 
-    return [...gmailMessages, ...outlookMessages];
+  // if (!authResult || !authResult.accessToken) {
+  //   throw new Error("Failed to acquire Outlook access token");
+  // }
+
+  // const token = authResult.accessToken;
+
+  const gmailMessages = await getGmailMessages();
+  // const outlookMessages = await getOutlookMessages(token);
+
+  return [...gmailMessages];
+  // return [...gmailMessages, ...outlookMessages];
 }
 
 export { parseEmails };

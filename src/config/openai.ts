@@ -1,36 +1,31 @@
-// openai.ts
+import axios from "axios";
 
-import axios from 'axios';
+const OPENAI_API_BASE_URL = "https://api.openai.com/v1"; // Example base URL, adjust as needed
 
-// OpenAI class to interact with OpenAI API
-export class OpenAI {
-    private apiKey: string;
-    private baseUrl: string = 'https://api.openai.com/v1'; // Example base URL for OpenAI API
+class OpenAI {
+  private apiKey: string;
 
-    constructor(apiKey: string) {
-        this.apiKey = apiKey;
-    }
+  constructor(apiKey: string = process.env.OPENAI_API_KEY || "") {
+    this.apiKey = apiKey;
+  }
 
-    // Example method to call OpenAI API
-    async analyzeEmail(emailText: string): Promise<string> {
-        try {
-            const response = await axios.post(
-                `${this.baseUrl}/engine/completions`,
-                {
-                    prompt: emailText,
-                    max_tokens: 150,
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${this.apiKey}`,
-                    },
-                }
-            );
-            return response.data.choices[0].text.trim();
-        } catch (error) {
-            console.error('Error analyzing email with OpenAI:', error);
-            throw new Error('Failed to analyze email');
+  async createCompletion(params: any) {
+    try {
+      const response = await axios.post(
+        `${OPENAI_API_BASE_URL}/completions`,
+        params,
+        {
+          headers: {
+            Authorization: `Bearer ${this.apiKey}`,
+            "Content-Type": "application/json",
+          },
         }
+      );
+      return response.data;
+    } catch (error) {
+      throw error;
     }
+  }
 }
+
+export { OpenAI };
